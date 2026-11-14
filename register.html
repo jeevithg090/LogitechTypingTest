@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Your Score · Typing Test Giveaway</title>
+    <meta
+      name="description"
+      content="Register your typing-test result for a chance to win the giveaway prize."
+    />
+    <meta name="theme-color" content="#1f2f45" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles/base.css" />
+    <link rel="stylesheet" href="/src/styles/register.css" />
+  </head>
+  <body class="register">
+    <canvas class="particles" id="particles" aria-hidden="true"></canvas>
+
+    <main class="page-container">
+      <section class="form-card" aria-labelledby="form-title">
+        <div class="form-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+            <path
+              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5Z"
+            />
+          </svg>
+        </div>
+        <header class="form-header">
+          <h1 id="form-title">
+            Stand a chance to win <span id="prize-name">a wireless mouse</span>
+          </h1>
+          <p>Complete the form below for your chance to win.</p>
+        </header>
+
+        <div class="form-body">
+          <div class="alert" id="config-warning" role="alert" hidden>
+            Submissions are not configured. Set <code>VITE_SCRIPT_URL</code> and rebuild.
+          </div>
+
+          <form id="registration-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="name">Full name</label>
+              <input
+                class="form-control"
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                maxlength="100"
+                required
+                aria-describedby="name-error"
+              />
+              <p class="field-error" id="name-error" aria-live="polite"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email address</label>
+              <input
+                class="form-control"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                maxlength="254"
+                required
+                aria-describedby="email-error"
+              />
+              <p class="field-error" id="email-error" aria-live="polite"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact_number">Contact number</label>
+              <input
+                class="form-control"
+                type="tel"
+                name="contact_number"
+                id="contact_number"
+                placeholder="Enter your contact number"
+                autocomplete="tel"
+                inputmode="tel"
+                value="+91 "
+                required
+                aria-describedby="contact_number-error"
+              />
+              <p class="field-error" id="contact_number-error" aria-live="polite"></p>
+            </div>
+
+            <div class="form-group">
+              <div class="label-row">
+                <label class="form-label" for="wpm_count">WPM count</label>
+                <span class="volunteer-badge">Volunteer use only</span>
+              </div>
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="number"
+                  name="wpm_count"
+                  id="wpm_count"
+                  placeholder="Enter WPM count"
+                  inputmode="numeric"
+                  min="0"
+                  max="300"
+                  step="1"
+                  required
+                  disabled
+                  aria-describedby="wpm-help wpm_count-error"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline unlock-btn"
+                  id="lock-button"
+                  aria-pressed="false"
+                >
+                  Unlock
+                </button>
+              </div>
+              <p class="help-text" id="wpm-help">A volunteer enters this after your test.</p>
+              <p class="field-error" id="wpm_count-error" aria-live="polite"></p>
+            </div>
+
+            <div
+              class="progress"
+              role="progressbar"
+              aria-label="Form completion"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              id="form-progress"
+            >
+              <div class="progress-bar" id="form-progress-bar"></div>
+            </div>
+
+            <div class="status" id="form-status" role="status" aria-live="polite" hidden></div>
+
+            <button type="submit" class="btn btn-submit" id="submit-button">
+              Submit registration
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <a href="/" class="back-home">← Back to home</a>
+    </main>
+
+    <dialog class="dialog" id="volunteer-dialog" aria-labelledby="volunteer-dialog-title">
+      <form method="dialog" id="volunteer-form">
+        <h2 id="volunteer-dialog-title">Volunteer authentication</h2>
+        <p>Enter the volunteer code to unlock the WPM field.</p>
+        <label class="form-label" for="volunteer-code">Volunteer code</label>
+        <input
+          class="form-control"
+          type="password"
+          id="volunteer-code"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          aria-describedby="volunteer-code-error"
+        />
+        <p class="field-error" id="volunteer-code-error" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-outline" id="volunteer-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="volunteer-submit">Unlock</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/register.js"></script>
+  </body>
+</html>

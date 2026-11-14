@@ -1,0 +1,86 @@
+body.home {
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f2f45 0%, #2980b9 100%);
+}
+
+.video-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-video .video-container {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  pointer-events: none;
+}
+
+.overlay-clear {
+  background-color: transparent;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem 1rem 3rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.actions .btn {
+  font-size: 1.15rem;
+}
+
+.kiosk-hint {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+}
+
+.kiosk-hint kbd {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.kiosk-hidden .actions,
+.kiosk-hidden .kiosk-hint {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
