@@ -1,7 +1,14 @@
+@import './base.css';
+
 body.home {
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-  background: linear-gradient(135deg, #1f2f45 0%, #2980b9 100%);
+  background: linear-gradient(
+    145deg,
+    var(--color-backdrop-start) 0%,
+    var(--color-backdrop-end) 100%
+  );
 }
 
 .video-container {
@@ -9,6 +16,12 @@ body.home {
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+
+.video-ready .video-container {
+  opacity: 1;
 }
 
 .video-container video {
@@ -21,61 +34,122 @@ body.home {
   display: none;
 }
 
+/* Gradient fallback with a hero message when no video is configured. */
+.fallback-hero {
+  display: none;
+}
+
+.no-video .fallback-hero {
+  display: block;
+  max-width: 40rem;
+  margin: auto 0;
+  text-align: center;
+  color: #fff;
+  animation: fade-in 500ms var(--ease) both;
+}
+
+.fallback-hero p:first-child {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-highlight);
+}
+
+.fallback-hero h2 {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.fallback-hero p:last-child {
+  margin: 0;
+  font-size: var(--text-lg);
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s ease;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 45%);
+  transition: opacity 300ms var(--ease);
   pointer-events: none;
 }
 
 .overlay-clear {
-  background-color: transparent;
+  opacity: 0;
 }
 
 .content {
   position: relative;
   z-index: 2;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding: 1rem 1rem 3rem;
+  padding: var(--space-4) var(--space-4) var(--space-6);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 1.25rem;
-  border-radius: var(--radius);
-  margin-bottom: 1rem;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: rgba(7, 15, 25, 0.55);
+  backdrop-filter: blur(8px);
+  animation: fade-in 500ms var(--ease) both;
 }
 
 .actions .btn {
-  font-size: 1.15rem;
+  min-height: 56px;
+  padding-inline: var(--space-6);
+  font-size: var(--text-lg);
 }
 
 .kiosk-hint {
   margin: 0;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--text-sm);
 }
 
 .kiosk-hint kbd {
-  padding: 0.1rem 0.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 1px var(--space-2);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 4px;
   font-family: inherit;
+  font-size: var(--text-xs);
 }
 
 .kiosk-hidden .actions,
 .kiosk-hidden .kiosk-hint {
   display: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Touch-only kiosks have no keyboard, so hide the shortcut hint there. */
+@media (hover: none) {
+  .kiosk-hint {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
