@@ -36,6 +36,9 @@ if (playlist.size === 0) {
 } else {
   // A single video simply loops; a playlist advances on "ended".
   video.loop = playlist.size === 1;
+  video.addEventListener('playing', () => document.body.classList.add('video-ready'), {
+    once: true,
+  });
   video.addEventListener('ended', () => play(playlist.next()));
   video.addEventListener('error', () => play(playlist.markFailed()));
   document.addEventListener('visibilitychange', () => {

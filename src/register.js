@@ -13,6 +13,9 @@ const submitButton = /** @type {HTMLButtonElement} */ (byId('submit-button'));
 const statusBox = byId('form-status');
 const progress = byId('form-progress');
 const progressBar = byId('form-progress-bar');
+const progressText = byId('form-progress-text');
+const successPanel = byId('success-panel');
+const successMessage = byId('success-message');
 const phoneInput = /** @type {HTMLInputElement} */ (byId('contact_number'));
 const wpmInput = /** @type {HTMLInputElement} */ (byId('wpm_count'));
 const lockButton = /** @type {HTMLButtonElement} */ (byId('lock-button'));
@@ -52,6 +55,22 @@ function readForm() {
   return data;
 }
 
+// --- Loading state ---------------------------------------------------------
+
+/** @param {HTMLButtonElement} button @param {boolean} loading @param {string} label */
+function setLoading(button, loading, label) {
+  button.disabled = loading;
+  button.toggleAttribute('aria-busy', loading);
+  button.replaceChildren();
+  if (loading) {
+    const spinner = document.createElement('span');
+    spinner.className = 'spinner';
+    spinner.setAttribute('aria-hidden', 'true');
+    button.append(spinner);
+  }
+  button.append(label);
+}
+
 // --- Status / progress -----------------------------------------------------
 
 /** @param {'success' | 'error' | 'info'} kind @param {string} message */
@@ -69,6 +88,7 @@ function updateProgress() {
     })),
   );
   progressBar.style.width = `${percent}%`;
+  progressText.textContent = `${percent}%`;
   progress.setAttribute('aria-valuenow', String(percent));
 }
 
@@ -150,8 +170,7 @@ volunteerForm.addEventListener('submit', async (event) => {
     return;
   }
 
-  volunteerSubmit.disabled = true;
-  volunteerSubmit.textContent = 'Checking…';
+  setLoading(volunteerSubmit, true, 'Checking…');
   try {
     await verifyVolunteerCode(config.scriptUrl, code);
     volunteerCode = code;
@@ -166,8 +185,7 @@ volunteerForm.addEventListener('submit', async (event) => {
           ? error.message
           : 'Could not verify the code.';
   } finally {
-    volunteerSubmit.disabled = false;
-    volunteerSubmit.textContent = 'Unlock';
+    setLoading(volunteerSubmit, false, 'Unlock');
   }
 });
 
@@ -189,9 +207,7 @@ form.addEventListener('submit', async (event) => {
     return;
   }
 
-  submitButton.disabled = true;
-  submitButton.setAttribute('aria-busy', 'true');
-  submitButton.textContent = 'Submitting…';
+  setLoading(submitButton, true, 'Submitting…');
 
   try {
     await postToScript(config.scriptUrl, {
@@ -201,16 +217,7 @@ form.addEventListener('submit', async (event) => {
       wpm_count: data.wpm_count.trim(),
       volunteer_code: volunteerCode,
     });
-
-    form.reset();
-    submitButton.textContent = 'Submitted';
-    setWpmUnlocked(false);
-    updateProgress();
-    showStatus(
-      'success',
-      `Thanks! Your registration was submitted. Returning to the home screen in ${config.redirectSeconds} seconds…`,
-    );
-    setTimeout(() => window.location.assign('/'), config.redirectSeconds * 1000);
+    showSuccess(data.name.trim());
   } catch (error) {
     if (error instanceof ApiError && error.code === 'unauthorized') {
       setWpmUnlocked(false);
@@ -221,11 +228,50 @@ form.addEventListener('submit', async (event) => {
     } else {
       showStatus('error', error instanceof Error ? error.message : 'Something went wrong.');
     }
-    submitButton.disabled = false;
-    submitButton.textContent = 'Submit registration';
   } finally {
-    submitButton.removeAttribute('aria-busy');
+    setLoading(submitButton, false, 'Submit registration');
   }
+});
+
+// --- Success ---------------------------------------------------------------
+
+let redirectTimer = 0;
+
+/** Swaps the form for a confirmation panel and counts down back to the home screen. */
+function showSuccess(name) {
+  form.reset();
+  setWpmUnlocked(false);
+  updateProgress();
+  for (const field of FIELDS) setFieldError(field, '');
+  statusBox.hidden = true;
+  form.hidden = true;
+  byId('back-home').hidden = true;
+  successPanel.hidden = false;
+  successPanel.focus();
+
+  let remaining = config.redirectSeconds;
+  const firstName = name.split(/\s+/)[0];
+  const render = () => {
+    successMessage.textContent = `Thanks, ${firstName}! Your score has been recorded. Returning to the home screen in ${remaining} second${remaining === 1 ? '' : 's'}…`;
+  };
+  render();
+  redirectTimer = window.setInterval(() => {
+    remaining -= 1;
+    if (remaining <= 0) {
+      window.clearInterval(redirectTimer);
+      window.location.assign('/');
+    } else {
+      render();
+    }
+  }, 1000);
+}
+
+byId('register-another').addEventListener('click', () => {
+  window.clearInterval(redirectTimer);
+  successPanel.hidden = true;
+  form.hidden = false;
+  byId('back-home').hidden = false;
+  /** @type {HTMLInputElement} */ (form.elements.namedItem('name')).focus();
 });
 
 updateProgress();
