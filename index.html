@@ -8,9 +8,18 @@
       name="description"
       content="Event kiosk for a typing-speed challenge: register your WPM score for a chance to win a prize."
     />
-    <meta name="theme-color" content="#1f2f45" />
+    <meta name="theme-color" content="#0f2a44" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Typing Test Giveaway" />
+    <meta
+      property="og:description"
+      content="Event kiosk for a typing-speed challenge: register your WPM score for a chance to win a prize."
+    />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles/base.css" />
     <link rel="stylesheet" href="/src/styles/home.css" />
   </head>
   <body class="home">
@@ -21,6 +30,11 @@
 
     <main class="content">
       <h1 class="visually-hidden">Typing Test Giveaway</h1>
+      <div class="fallback-hero">
+        <p>Typing speed challenge</p>
+        <h2>How fast can you type?</h2>
+        <p>Take the typing test, then register your score for a chance to win.</p>
+      </div>
       <nav class="actions" id="actions" aria-label="Kiosk actions">
         <a href="/register.html" class="btn btn-primary">Enter User Details</a>
         <a

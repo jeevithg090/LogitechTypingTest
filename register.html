@@ -8,9 +8,18 @@
       name="description"
       content="Register your typing-test result for a chance to win the giveaway prize."
     />
-    <meta name="theme-color" content="#1f2f45" />
+    <meta name="theme-color" content="#0f2a44" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Register Your Score · Typing Test Giveaway" />
+    <meta
+      property="og:description"
+      content="Register your typing-test result for a chance to win the giveaway prize."
+    />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles/base.css" />
     <link rel="stylesheet" href="/src/styles/register.css" />
   </head>
   <body class="register">
@@ -90,7 +99,20 @@
             <div class="form-group">
               <div class="label-row">
                 <label class="form-label" for="wpm_count">WPM count</label>
-                <span class="volunteer-badge">Volunteer use only</span>
+                <span class="volunteer-badge">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="12"
+                    height="12"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5Zm-3 8V6a3 3 0 1 1 6 0v3H9Z"
+                    />
+                  </svg>
+                  Volunteer use only
+                </span>
               </div>
               <div class="input-group">
                 <input
@@ -120,6 +142,9 @@
               <p class="field-error" id="wpm_count-error" aria-live="polite"></p>
             </div>
 
+            <div class="progress-label" aria-hidden="true">
+              <span>Form completion</span><span id="form-progress-text">0%</span>
+            </div>
             <div
               class="progress"
               role="progressbar"
@@ -134,14 +159,39 @@
 
             <div class="status" id="form-status" role="status" aria-live="polite" hidden></div>
 
-            <button type="submit" class="btn btn-submit" id="submit-button">
+            <button type="submit" class="btn btn-primary btn-submit" id="submit-button">
               Submit registration
             </button>
           </form>
+
+          <div class="success-panel" id="success-panel" tabindex="-1" hidden>
+            <div class="success-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                width="32"
+                height="32"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2>You're in the draw!</h2>
+            <p id="success-message">Your registration was submitted.</p>
+            <div class="success-actions">
+              <a href="/" class="btn btn-primary">Back to home</a>
+              <button type="button" class="btn btn-outline" id="register-another">
+                Register another
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <a href="/" class="back-home">← Back to home</a>
+      <a href="/" class="btn btn-ghost back-home" id="back-home">← Back to home</a>
     </main>
 
     <dialog class="dialog" id="volunteer-dialog" aria-labelledby="volunteer-dialog-title">
